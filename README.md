@@ -31,7 +31,7 @@ Currently there binaries compiled for:
 The delivered Ansible playbook is also used to test the Nmon App for Splunk and Universal Forwarder deployment tests, to
 use it out of the box, you would need to:
 
-* Have the "/opt/nmon_source" directory existing (can be a symbolic link)
+* Have the "/opt/nmon-binaries" directory existing (can be a symbolic link)
 
 * Have Splunk Universal Forwarders binaries (*.tar.gz) available in "/opt/deployment/splunk_bin" (for both 32/64 bits)
 
