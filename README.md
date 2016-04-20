@@ -1,5 +1,7 @@
 # Nmon binaries for Linux x86_64 / i686
 
+## nmon version: 16e
+
 See the Nmon Linux site: 
 
 * http://nmon.sourceforge.net
