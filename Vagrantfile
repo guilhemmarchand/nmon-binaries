@@ -4,21 +4,48 @@
 # Vagrant multi machine configuration
 
 servers=[
+      # This box is not affected by current trouble with Ubuntu 15 / 16
       {
-        :hostname => "ubuntu-trusty32",
-        :box => "ubuntu/trusty32",
+        :hostname => "ubuntu-1604-64",
+        :box => "easyscp/xenial",
+        :ram => 512,
+        :cpu => 1
+      },
+      # This image does not currently works with private network,see:
+      # https://github.com/mitchellh/vagrant/issues/6871
+      #{
+      #  :hostname => "ubuntu-1510-64",
+      #  :box => "boxcutter/ubuntu1510",
+      #  :ram => 512,
+      #  :cpu => 1
+      #},
+      {
+        :hostname => "ubuntu-1510-64",
+        :box => "sgallen/wily64",
         :ram => 512,
         :cpu => 1
       },
       {
-        :hostname => "ubuntu-trusty64",
-        :box => "ubuntu/trusty64",
+        :hostname => "ubuntu-1404-64",
+        :box => "boxcutter/ubuntu1404",
         :ram => 512,
         :cpu => 1
       },
       {
-        :hostname => "ubuntu-willy64",
-        :box => "larryli/wily64",
+        :hostname => "ubuntu-1204-64",
+        :box => "boxcutter/ubuntu1204",
+        :ram => 512,
+        :cpu => 1
+      },
+      {
+        :hostname => "ubuntu-1404-32",
+        :box => "boxcutter/ubuntu1404-i386",
+        :ram => 512,
+        :cpu => 1
+      },
+      {
+        :hostname => "ubuntu-1204-32",
+        :box => "boxcutter/ubuntu1204-i386",
         :ram => 512,
         :cpu => 1
       },

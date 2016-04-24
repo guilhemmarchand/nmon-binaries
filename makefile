@@ -178,43 +178,6 @@ nmon_x86_fedora23:
 	cc -s -o nmon_x86_fedora23 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86
 
 
-#### x86 Canonical Ubuntu
-nmon_x86_ubuntu810: 
-	cc -o nmon_x86_ubuntu810 $(FILE) $(CFLAGS) $(LDFLAGS) -D X86 -D UBUNTU
-
-nmon_x86_64_ubuntu810: 
-	cc -o nmon_x86_64_ubuntu810 $(FILE) $(CFLAGS) $(LDFLAGS) -D X86 -D UBUNTU
-
-nmon_x86_64_ubuntu910: 
-	cc -o nmon_x86_64_ubuntu910 $(FILE) $(CFLAGS) $(LDFLAGS) -D X86 -D UBUNTU
-
-nmon_x86_ubuntu910: 
-	cc -o nmon_x86_ubuntu910 $(FILE) $(CFLAGS) $(LDFLAGS) -D X86 -D UBUNTU
-
-nmon_x86_ubuntu134: lmon.c
-	cc -o nmon_x86_ubuntu134 $(FILE) $(CFLAGS) $(LDFLAGS) -D X86 -D UBUNTU
-
-nmon_x86_ubuntu1404: lmon.c
-	cc -o nmon_x86_ubuntu1404 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
-
-nmon_x86_ubuntu140403: lmon.c
-	cc -o nmon_x86_ubuntu140403 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
-
-nmon_x86_ubuntu140404: lmon.c
-	cc -o nmon_x86_ubuntu140404 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
-
-nmon_x86_ubuntu1410: lmon.c
-	cc -o nmon_x86_ubuntu1410 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
-
-nmon_x86_ubuntu1504: lmon.c
-	cc -o nmon_x86_ubuntu1504 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
-
-nmon_x86_ubuntu1510: lmon.c
-	cc -o nmon_x86_ubuntu1510 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
-
-nmon_x86_ubuntu1604: lmon.c
-	cc -o nmon_x86_ubuntu1604 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
-
 #### x86 Oracle Linux (ol) for x86_64
 nmon_x86_64_ol72: lmon.c
 	cc -o nmon_x86_64_ol72 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
@@ -300,8 +263,24 @@ nmon_x86_centos66:  $(FILE)
 nmon_x86_centos67:  $(FILE)
 	cc -o nmon_x86_centos67 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86 -D RHEL6
 
+#### x86 Canonical Ubuntu x86_64
 
+nmon_x86_64_ubuntu1204: lmon.c
+	cc -o nmon_x86_64_ubuntu1204 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
+nmon_x86_64_ubuntu1404: lmon.c
+	cc -o nmon_x86_64_ubuntu1404 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
+nmon_x86_64_ubuntu1510: lmon.c
+	cc -o nmon_x86_64_ubuntu1510 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
+nmon_x86_64_ubuntu1604: lmon.c
+	cc -o nmon_x86_64_ubuntu1604 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
+#### x86 Canonical Ubuntu x86
+
+nmon_x86_ubuntu1204: lmon.c
+	cc -o nmon_x86_ubuntu1204 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
+
+nmon_x86_ubuntu1404: lmon.c
+	cc -o nmon_x86_ubuntu1404 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU

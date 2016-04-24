@@ -61,28 +61,45 @@
 
     when: (ansible_distribution == "CentOS" or ansible_distribution == "OracleLinux") and (ansible_distribution_major_version == "6")
 
-############################## nmon dev dependencies for Oracle Linux ##############################
+############################## nmon dev dependencies for Oracle Linux / CentOS ##############################
 
   - block:
 
-    - name: Oracle Linux - gcc dev dependencies for nmon compilation
+    - name: Oracle Linux / CentOS - gcc dev dependencies for nmon compilation
       yum: name=gcc* state=latest
 
     when: (ansible_distribution == "OracleLinux" or ansible_distribution == "CentOS")
 
   - block:
 
-    - name: Oracle Linux - ncurses dev dependencies for nmon compilation
+    - name: Oracle Linux / CentOS - ncurses dev dependencies for nmon compilation
       yum: name=ncurses-dev* state=latest
 
     when: (ansible_distribution == "OracleLinux" or ansible_distribution == "CentOS")
 
   - block:
 
-    - name: Oracle Linux - make dev dependencies for nmon compilation
+    - name: Oracle Linux / CentOS - make dev dependencies for nmon compilation
       yum: name=make state=latest
 
     when: (ansible_distribution == "OracleLinux" or ansible_distribution == "CentOS")
+
+############################## nmon dev dependencies for Ubuntu / Debian ##############################
+
+  - block:
+
+    - name: Ubuntu / Debian - build-essentials
+      apt: name=build-essential state=latest update_cache=yes
+
+    when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+
+  - block:
+
+    - name: Ubuntu / Debian - ncurses dev dependencies for nmon compilation
+      apt: name=libncurses5-dev state=latest
+      ignore_errors: yes
+
+    when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
 
 ############################## Deploy and Configuration Splunk UF ##############################
 
@@ -265,6 +282,44 @@
 
   - command: "make nmon_x86_centos64"
     when: (ansible_distribution == "CentOS" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('6.4'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+############################## nmon compilation ##############################
+
+  - command: "make nmon_x86_64_ubuntu1204"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('12.04'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_64_ubuntu1404"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('14.04'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_64_ubuntu1510"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('15.10'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_64_ubuntu1604"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('16.04'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_ubuntu1204"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('12.04'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_ubuntu1404"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('14.04'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
