@@ -22,7 +22,7 @@ See:
 
 ## Linux distributions
 
-Currently there binaries compiled for:
+Currently, binaries are available for:
 
 * Oracle Linux: *ol*
 
