@@ -28,6 +28,10 @@ Currently there binaries compiled for:
 
 * CentOS: *centos*
 
+* Debian: *debian*
+
+* Ubuntu: *ubuntu*
+
 ## Howto
 
 The delivered Ansible playbook is also used to test the Nmon App for Splunk and Universal Forwarder deployment tests, to
