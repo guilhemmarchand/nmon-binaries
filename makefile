@@ -284,3 +284,38 @@ nmon_x86_ubuntu1204: lmon.c
 
 nmon_x86_ubuntu1404: lmon.c
 	cc -o nmon_x86_ubuntu1404 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
+
+#### x86 Debian x86_64
+
+nmon_x86_64_debian82: lmon.c
+	cc -o nmon_x86_64_debian82 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+nmon_x86_64_debian81: lmon.c
+	cc -o nmon_x86_64_debian81 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+nmon_x86_64_debian80: lmon.c
+	cc -o nmon_x86_64_debian80 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+nmon_x86_64_debian79: lmon.c
+	cc -o nmon_x86_64_debian79 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+nmon_x86_64_debian78: lmon.c
+	cc -o nmon_x86_64_debian78 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+#### x86 Debian x86
+
+nmon_x86_debian82: lmon.c
+	cc -o nmon_x86_debian82 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+nmon_x86_debian81: lmon.c
+	cc -o nmon_x86_debian81 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+nmon_x86_debian80: lmon.c
+	cc -o nmon_x86_debian80 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+nmon_x86_debian79: lmon.c
+	cc -o nmon_x86_debian79 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+nmon_x86_debian78: lmon.c
+	cc -o nmon_x86_debian78 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
