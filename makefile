@@ -179,6 +179,9 @@ nmon_x86_fedora23:
 
 
 #### x86 Oracle Linux (ol) for x86_64
+nmon_x86_64_ol73: lmon.c
+	cc -o nmon_x86_64_ol73 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
 nmon_x86_64_ol72: lmon.c
 	cc -o nmon_x86_64_ol72 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
 
@@ -207,6 +210,9 @@ nmon_x86_64_ol510: lmon.c
 	cc -o nmon_x86_64_ol510 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
 
 #### x86 Oracle Linux (ol) for x86
+
+nmon_x86_ol68: lmon.c
+	cc -o nmon_x86_ol68 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
 
 nmon_x86_ol67: lmon.c
 	cc -o nmon_x86_ol67 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
@@ -249,6 +255,14 @@ nmon_x86_64_centos71:  $(FILE)
 nmon_x86_64_centos72:  $(FILE)
 	cc -o nmon_x86_64_centos72 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86 -D RHEL7
 
+#### x86 for AWS AMI x86_64
+
+nmon_x86_64_ami_201703:  $(FILE)
+	cc -o nmon_x86_64_ami_201703 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
+nmon_x86_64_ami_201609:  $(FILE)
+	cc -o nmon_x86_64_ami_201609 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+
 #### x86 for CentOS x86
 
 nmon_x86_centos64:  $(FILE)
@@ -277,6 +291,9 @@ nmon_x86_64_ubuntu1510: lmon.c
 nmon_x86_64_ubuntu1604: lmon.c
 	cc -o nmon_x86_64_ubuntu1604 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
+nmon_x86_64_ubuntu1610: lmon.c
+	cc -o nmon_x86_64_ubuntu1610 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
+
 #### x86 Canonical Ubuntu x86
 
 nmon_x86_ubuntu1204: lmon.c
@@ -284,6 +301,9 @@ nmon_x86_ubuntu1204: lmon.c
 
 nmon_x86_ubuntu1404: lmon.c
 	cc -o nmon_x86_ubuntu1404 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
+
+nmon_x86_ubuntu1610: lmon.c
+	cc -o nmon_x86_ubuntu1610 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
 #### x86 Debian x86_64
 
