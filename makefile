@@ -70,6 +70,9 @@ nmon_power_ubuntu1510: $(FILE)
 nmon_power_ubuntu1604: $(FILE)
 	gcc -o nmon_power_ubuntu1604 $(FILE) $(CFLAGS) $(LDFLAGS) -D POWER -D KERNEL_2_6_18 -D UBUNTU
 
+nmon_power_ubuntu1704: $(FILE)
+	gcc -o nmon_power_ubuntu1704 $(FILE) $(CFLAGS) $(LDFLAGS) -D POWER -D KERNEL_2_6_18 -D UBUNTU
+
 #### POWER Canonical Ubuntu WITH NVIDIA GPU
 nmon_power_ubuntu140403_gpu: $(FILE)
 	gcc -o nmon_power_ubuntu140403_gpu $(FILE) $(CFLAGS) $(LDFLAGS) -D POWER -D KERNEL_2_6_18 -D NVIDIA_GPU /usr/lib/nvidia-352/libnvidia-ml.so -D UBUNTU
