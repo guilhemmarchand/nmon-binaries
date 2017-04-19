@@ -297,6 +297,9 @@ nmon_x86_64_ubuntu1604: lmon.c
 nmon_x86_64_ubuntu1610: lmon.c
 	cc -o nmon_x86_64_ubuntu1610 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
+nmon_x86_64_ubuntu1704: lmon.c
+	cc -o nmon_x86_64_ubuntu1704 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
+
 #### x86 Canonical Ubuntu x86
 
 nmon_x86_ubuntu1204: lmon.c
@@ -307,6 +310,9 @@ nmon_x86_ubuntu1404: lmon.c
 
 nmon_x86_ubuntu1610: lmon.c
 	cc -o nmon_x86_ubuntu1610 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
+
+nmon_x86_ubuntu1704: lmon.c
+	cc -o nmon_x86_ubuntu1704 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
 #### x86 Debian x86_64
 
