@@ -4,35 +4,7 @@
   become: yes
   become_method: sudo
 
-  vars:
-   - splunk_x86_64_binpath: "{{ lookup('pipe', 'ls /opt/deployment/splunk_bin/splunkforwarder*x86_64.tgz | head -1') }}"
-   - splunk_i686_binpath: "{{ lookup('pipe', 'ls /opt/deployment/splunk_bin/splunkforwarder*i686.tgz | head -1') }}"
-   - splunk_installpath: /opt
-   - splunk_deploymentserver_adress: 172.28.128.250:8089
-   - localzone: Europe/Paris
-
   tasks:
-
-############################## Set Timezone ##############################
-
-# Configure time zone
-  - name: Set timezone variables for Debian / Ubuntu
-    copy: content='{{ localzone }}'
-          dest=/etc/timezone
-          owner=root
-          group=root
-          mode=0644
-          backup=yes
-    notify:
-      - update timezone
-    when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
-  - block:
-
-    - name: Set timezone for CentOS / RHEL / Fedora
-      file: src=/usr/share/zoneinfo/{{ localzone }}  dest=/etc/localtime state=link force=yes
-
-    when: ansible_distribution != 'Debian' or ansible_distribution != 'Ubuntu'
 
 ############################## Fedora yum error fix ##############################
 
@@ -41,7 +13,10 @@
     - name: Install yum for Fedora
       command: dnf install yum -y -q
 
-    when: (ansible_distribution == "Fedora" and ansible_distribution_major_version == "23")
+    - name: Install Python
+      yum: name=python state=latest update_cache=yes
+
+    when: (ansible_distribution == "Fedora")
 
 ############################## Perl dependency ##############################
 
@@ -101,56 +76,23 @@
 
     when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
 
-############################## Deploy and Configuration Splunk UF ##############################
-
-  # Verify if Splunk Universal Forwarder is already installed
-  - name: Check if Splunk Universal Forwarder path exists
-    stat: path={{ splunk_installpath }}/splunkforwarder
-    register: check_splunk_path
-
-  # Copy and unarchive Splunk Universal Forwarder if not present
-  - name: Copy and unarchive Splunk Universal Forwarder for 64 bits architecture
-    unarchive: src={{ splunk_x86_64_binpath }} dest={{ splunk_installpath }}
-    when: (ansible_architecture == "x86_64" and check_splunk_path.stat.exists == false)
-
-  # Copy and unarchive Splunk Universal Forwarder if not present
-  - name: Copy and unarchive Splunk Universal Forwarder for 32 bits architecture
-    unarchive: src={{ splunk_i686_binpath }} dest={{ splunk_installpath }}
-    when: (ansible_architecture != "x86_64" and check_splunk_path.stat.exists == false)
-
-  # Start and accept licence
-  - name: Start Splunk Universal Forwarder and accept licence
-    command: "{{ splunk_installpath }}/splunkforwarder/bin/splunk start --answer-yes --no-prompt --accept-license"
-    when: check_splunk_path.stat.exists == false
-    ignore_errors: yes
-
-  # Enable boot-start
-  - name: Enable boot start for Splunk Universal Forwarder
-    command: "{{ splunk_installpath }}/splunkforwarder/bin/splunk enable boot-start"
-    when: check_splunk_path.stat.exists == false
-    ignore_errors: yes
-
-  # Configure Splunk as a client of the deployment server
-  - name: Configure Splunk as client of the deployment server
-    command: "{{ splunk_installpath }}/splunkforwarder/bin/splunk set deploy-poll {{ splunk_deploymentserver_adress }} -auth admin:changeme"
-    when: check_splunk_path.stat.exists == false
-    ignore_errors: yes
-
-  # Finally restart Splunk
-  - name: Restart Splunk Universal Forwarder
-    command: "{{ splunk_installpath }}/splunkforwarder/bin/splunk restart"
-    when: check_splunk_path.stat.exists == false
-    ignore_errors: yes
-
 ############################## nmon compilation ##############################
 
   - name: Copy nmon source code
     copy: src=/opt/nmon-binaries/lmon.c dest=/home/vagrant owner=vagrant group=vagrant
+    when: (ansible_system == "Linux")
 
   - name: Copy makefile
     copy: src=/opt/nmon-binaries/makefile dest=/home/vagrant owner=vagrant group=vagrant
+    when: (ansible_system == "Linux")
 
 ############################## Oracle Linux ##############################
+
+  - command: "make nmon_x86_64_ol73"
+    when: (ansible_distribution == "OracleLinux" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('7.3'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
 
   - command: "make nmon_x86_64_ol72"
     when: (ansible_distribution == "OracleLinux" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('7.2'))
@@ -195,30 +137,36 @@
     ignore_errors: yes
 
   - command: "make nmon_x86_ol67"
-    when: (ansible_distribution == "OracleLinux" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('6.7'))
+    when: (ansible_distribution == "OracleLinux" and ansible_architecture == "i386" and ansible_distribution_version.startswith('6.7'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
 
   - command: "make nmon_x86_ol66"
-    when: (ansible_distribution == "OracleLinux" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('6.6'))
+    when: (ansible_distribution == "OracleLinux" and ansible_architecture == "i386" and ansible_distribution_version.startswith('6.6'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
 
   - command: "make nmon_x86_ol65"
-    when: (ansible_distribution == "OracleLinux" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('6.5'))
+    when: (ansible_distribution == "OracleLinux" and ansible_architecture == "i386" and ansible_distribution_version.startswith('6.5'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
 
   - command: "make nmon_x86_ol64"
-    when: (ansible_distribution == "OracleLinux" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('6.4'))
+    when: (ansible_distribution == "OracleLinux" and ansible_architecture == "i386" and ansible_distribution_version.startswith('6.4'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
 
 ############################## nmon compilation ##############################
+
+  - command: "make nmon_x86_64_centos73"
+    when: (ansible_distribution == "CentOS" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('7.3'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
 
   - command: "make nmon_x86_64_centos72"
     when: (ansible_distribution == "CentOS" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('7.2'))
@@ -234,6 +182,12 @@
 
   - command: "make nmon_x86_64_centos70"
     when: (ansible_distribution == "CentOS" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('7.0'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_64_centos68"
+    when: (ansible_distribution == "CentOS" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('6.8'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
@@ -262,26 +216,32 @@
     become_user: vagrant
     ignore_errors: yes
 
+  - command: "make nmon_x86_centos68"
+    when: (ansible_distribution == "CentOS" and ansible_architecture == "i386" and ansible_distribution_version.startswith('6.8'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
   - command: "make nmon_x86_centos67"
-    when: (ansible_distribution == "CentOS" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('6.7'))
+    when: (ansible_distribution == "CentOS" and ansible_architecture == "i386" and ansible_distribution_version.startswith('6.7'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
 
   - command: "make nmon_x86_centos66"
-    when: (ansible_distribution == "CentOS" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('6.6'))
+    when: (ansible_distribution == "CentOS" and ansible_architecture == "i386" and ansible_distribution_version.startswith('6.6'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
 
   - command: "make nmon_x86_centos65"
-    when: (ansible_distribution == "CentOS" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('6.5'))
+    when: (ansible_distribution == "CentOS" and ansible_architecture == "i386" and ansible_distribution_version.startswith('6.5'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
 
   - command: "make nmon_x86_centos64"
-    when: (ansible_distribution == "CentOS" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('6.4'))
+    when: (ansible_distribution == "CentOS" and ansible_architecture == "i386" and ansible_distribution_version.startswith('6.4'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
@@ -312,14 +272,70 @@
     become_user: vagrant
     ignore_errors: yes
 
+  - command: "make nmon_x86_64_ubuntu1610"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('16.10'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_64_ubuntu1704"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('17.04'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
   - command: "make nmon_x86_ubuntu1204"
-    when: (ansible_distribution == "Ubuntu" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('12.04'))
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "i386" and ansible_distribution_version.startswith('12.04'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
 
   - command: "make nmon_x86_ubuntu1404"
-    when: (ansible_distribution == "Ubuntu" and ansible_architecture != "x86_64" and ansible_distribution_version.startswith('14.04'))
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "i386" and ansible_distribution_version.startswith('14.04'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_ubuntu1604"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "i386" and ansible_distribution_version.startswith('16.04'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_ubuntu1610"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "i386" and ansible_distribution_version.startswith('16.10'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_ubuntu1704"
+    when: (ansible_distribution == "Ubuntu" and ansible_architecture == "i386" and ansible_distribution_version.startswith('17.04'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+############################## nmon compilation ##############################
+
+  - command: "make nmon_x86_64_debian8"
+    when: (ansible_distribution == "Debian" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('8'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_64_debian7"
+    when: (ansible_distribution == "Debian" and ansible_architecture == "x86_64" and ansible_distribution_version.startswith('7'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_debian8"
+    when: (ansible_distribution == "Debian" and ansible_architecture == "i386" and ansible_distribution_version.startswith('8'))
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+
+  - command: "make nmon_x86_debian7"
+    when: (ansible_distribution == "Debian" and ansible_architecture == "i386" and ansible_distribution_version.startswith('7'))
     become: yes
     become_user: vagrant
     ignore_errors: yes
@@ -327,11 +343,7 @@
 
   # Copy compiled binary
   - shell: "cp /home/vagrant/nmon* /opt/nmon-binaries/"
+    when: (ansible_system == "Linux")
     become: yes
     become_user: vagrant
     ignore_errors: yes
-
-  handlers:
-
-    - name: update timezone
-      command: dpkg-reconfigure --frontend noninteractive tzdata

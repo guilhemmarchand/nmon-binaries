@@ -249,6 +249,9 @@ nmon_x86_64_centos66:  $(FILE)
 nmon_x86_64_centos67:  $(FILE)
 	cc -o nmon_x86_64_centos67 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86 -D RHEL6
 
+nmon_x86_64_centos68:  $(FILE)
+	cc -o nmon_x86_64_centos68 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86 -D RHEL6
+
 nmon_x86_64_centos70:  $(FILE)
 	cc -o nmon_x86_64_centos70 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86 -D RHEL7
 
@@ -257,6 +260,9 @@ nmon_x86_64_centos71:  $(FILE)
 
 nmon_x86_64_centos72:  $(FILE)
 	cc -o nmon_x86_64_centos72 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86 -D RHEL7
+
+nmon_x86_64_centos73:  $(FILE)
+	cc -o nmon_x86_64_centos73 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86 -D RHEL7
 
 #### x86 for AWS AMI x86_64
 
@@ -279,6 +285,9 @@ nmon_x86_centos66:  $(FILE)
 
 nmon_x86_centos67:  $(FILE)
 	cc -o nmon_x86_centos67 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86 -D RHEL6
+
+nmon_x86_centos68:  $(FILE)
+	cc -o nmon_x86_centos68 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18  -D X86 -D RHEL6
 
 #### x86 Canonical Ubuntu x86_64
 
@@ -308,6 +317,9 @@ nmon_x86_ubuntu1204: lmon.c
 nmon_x86_ubuntu1404: lmon.c
 	cc -o nmon_x86_ubuntu1404 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
+nmon_x86_ubuntu1604: lmon.c
+	cc -o nmon_x86_ubuntu1604 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
+
 nmon_x86_ubuntu1610: lmon.c
 	cc -o nmon_x86_ubuntu1610 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86 -D UBUNTU
 
@@ -316,35 +328,16 @@ nmon_x86_ubuntu1704: lmon.c
 
 #### x86 Debian x86_64
 
-nmon_x86_64_debian82: lmon.c
-	cc -o nmon_x86_64_debian82 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+nmon_x86_64_debian8: lmon.c
+	cc -o nmon_x86_64_debian8 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
 
-nmon_x86_64_debian81: lmon.c
-	cc -o nmon_x86_64_debian81 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
-
-nmon_x86_64_debian80: lmon.c
-	cc -o nmon_x86_64_debian80 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
-
-nmon_x86_64_debian79: lmon.c
-	cc -o nmon_x86_64_debian79 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
-
-nmon_x86_64_debian78: lmon.c
-	cc -o nmon_x86_64_debian78 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+nmon_x86_64_debian7: lmon.c
+	cc -o nmon_x86_64_debian7 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
 
 #### x86 Debian x86
 
-nmon_x86_debian82: lmon.c
-	cc -o nmon_x86_debian82 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
+nmon_x86_debian8: lmon.c
+	cc -o nmon_x86_debian8 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
 
-nmon_x86_debian81: lmon.c
-	cc -o nmon_x86_debian81 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
-
-nmon_x86_debian80: lmon.c
-	cc -o nmon_x86_debian80 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
-
-nmon_x86_debian79: lmon.c
-	cc -o nmon_x86_debian79 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
-
-nmon_x86_debian78: lmon.c
-	cc -o nmon_x86_debian78 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86
-
+nmon_x86_debian7: lmon.c
+	cc -o nmon_x86_debian7 $(FILE) $(CFLAGS) $(LDFLAGS) -D KERNEL_2_6_18 -D X86

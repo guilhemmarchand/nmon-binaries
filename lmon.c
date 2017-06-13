@@ -48,7 +48,7 @@ KERNEL_2_6_18 1 kernel level and above adds the following to the disk stats
 #define RAW(member)      (long)((long)(p->cpuN[i].member)   - (long)(q->cpuN[i].member))
 #define RAWTOTAL(member) (long)((long)(p->cpu_total.member) - (long)(q->cpu_total.member))
 
-#define VERSION "16f"
+#define VERSION "16g"
 char version[] = VERSION;
 static char *SccsId = "nmon " VERSION;
 
@@ -271,136 +271,6 @@ void error(char *err)
 
 /*
  * lscpu command output save
-*/
-/* lscpu
-x86 Ubuntu 15.04
-nag@violet:~$ lscpu
-Architecture:          x86_64
-CPU op-mode(s):        32-bit, 64-bit
-Byte Order:            Little Endian
-CPU(s):                8
-On-line CPU(s) list:   0-7
-Thread(s) per core:    1
-Core(s) per socket:    2
-Socket(s):             4
-NUMA node(s):          1
-Vendor ID:             GenuineIntel
-CPU family:            15
-Model:                 6
-Model name:            Genuine Intel(R) CPU 3.33GHz
-Stepping:              8
-CPU MHz:               3336.183
-BogoMIPS:              6672.64
-Virtualisation:        VT-x
-L1d cache:             16K
-L2 cache:              1024K
-L3 cache:              16384K
-NUMA node0 CPU(s):     0-7
-
-x86 Ubuntu 14.10
-nag@ultraviolet:~$ lscpu
-Architecture:          x86_64
-CPU op-mode(s):        32-bit, 64-bit
-Byte Order:            Little Endian
-CPU(s):                12
-On-line CPU(s) list:   0-11
-Thread(s) per core:    2
-Core(s) per socket:    6
-Socket(s):             1
-NUMA node(s):          1
-Vendor ID:             GenuineIntel
-CPU family:            6
-Model:                 44
-Model name:            Intel(R) Xeon(R) CPU           E5645  @ 2.40GHz
-Stepping:              2
-CPU MHz:               2394.000
-CPU max MHz:           2394.0000
-CPU min MHz:           1596.0000
-BogoMIPS:              4800.36
-Virtualization:        VT-x
-L1d cache:             32K
-L1i cache:             32K
-L2 cache:              256K
-L3 cache:              12288K
-NUMA node0 CPU(s):     0-11
-
-POWER PowerKVM host  SMT=off fout POWER8 with 5 cores each
-[root@lemon ~]# lscpu
-Architecture:          ppc64
-CPU op-mode(s):        32-bit, 64-bit
-Byte Order:            Big Endian
-CPU(s):                160
-On-line CPU(s) list:   0,8,16,24,32,40,48,56,64,72,80,88,96,104,112,120,128,136,144,152
-Off-line CPU(s) list:  1-7,9-15,17-23,25-31,33-39,41-47,49-55,57-63,65-71,73-79,81-87,89-95,97-103,105-111,113-119,121-127,129-135,137-143,145-151,153-159
-Thread(s) per core:    1
-Core(s) per socket:    5
-Socket(s):             4
-NUMA node(s):          4
-Model:                 8247-22L
-CPU max MHz:           3690.0000
-CPU min MHz:           2061.0000
-L1d cache:             64K
-L1i cache:             32K
-L2 cache:              512K
-L3 cache:              8192K
-NUMA node0 CPU(s):     0,8,16,24,32
-NUMA node1 CPU(s):     40,48,56,64,72
-NUMA node16 CPU(s):    80,88,96,104,112
-NUMA node17 CPU(s):    120,128,136,144,152
-
-POWER8 S812LC  single 10 core POWER SMT=8 Ubuntu 14.04.03
-user1@maroon:~$ lscpu
-Architecture:          ppc64le
-Byte Order:            Little Endian
-CPU(s):                80
-On-line CPU(s) list:   0-79
-Thread(s) per core:    8
-Core(s) per socket:    10
-Socket(s):             1
-NUMA node(s):          1
-Model:                 8348-21C
-L1d cache:             64K
-L1i cache:             32K
-L2 cache:              512K
-L3 cache:              8192K
-NUMA node0 CPU(s):     0-79
-
-POWER8 S824 four POWER8 with 8 cores each SMT=8 RHEL 7.1 BE
-[root@vm17 ~]# lscpu
-Architecture:          ppc64
-CPU op-mode(s):        32-bit, 64-bit
-Byte Order:            Big Endian
-CPU(s):                32
-On-line CPU(s) list:   0-31
-Thread(s) per core:    8
-Core(s) per socket:    1
-Socket(s):             4
-NUMA node(s):          3
-Model:                 IBM,8286-42A
-L1d cache:             64K
-L1i cache:             32K
-NUMA node0 CPU(s):     0-31
-NUMA node2 CPU(s):
-NUMA node3 CPU(s):
-
-POWER8 SLES 11.3 S822A CPU count is WRONG!
-vm20:~ # lscpu
-Architecture:          ppc64
-Byte Order:            Big Endian
-CPU(s):                64
-On-line CPU(s) list:   0-31
-Off-line CPU(s) list:  32-63
-Thread(s) per core:    8
-Core(s) per socket:    1
-Socket(s):             4
-NUMA node(s):          2
-Model:                 IBM,8284-22A
-Hypervisor vendor:     pHyp
-Virtualization type:   full
-L1d cache:             64K
-L1i cache:             32K
-NUMA node0 CPU(s):     0-31
-NUMA node1 CPU(s):
 */
 int lscpu_available = 0;
 
@@ -779,6 +649,7 @@ int show_args = 0;
 int show_all = 1;		/* 1=all procs& disk 0=only if 1% or more busy */
 int show_verbose = 0;
 int show_jfs = 0;
+int show_jfs_minimum = 0;
 int flash_on = 0;
 int first_huge = 1;
 int first_steal = 1;
@@ -1748,7 +1619,7 @@ void get_cpu_cnt()
 	else
 	    break;
     }
-    if (cpus >= CPUMAX) {
+    if (cpus > CPUMAX) {
 	printf
 	    ("This nmon supports only %d CPU threads (Logical CPUs) and the machine appears to have %d.\nnmon stopping as its unsafe to continue.\n",
 	     CPUMAX, cpus);
@@ -3242,6 +3113,8 @@ void help(void)
     printf
 	("\t              Don't save or show proc/disk using less than this percent\n");
     printf
+	("\t-J            Switch-off Journel Filesystem stats collection (can causes issues with automound NFS)\n");
+    printf
 	("\t-l <dpl>      Disks per line in data capture to avoid spreadsheet width issues. Default 150. EMC=64.\n");
     printf
 	("\t-m <directory> nmon changes to this directory before saving to file\n");
@@ -3312,6 +3185,7 @@ void help(void)
 	("\tG   = Change Disk stats (d) to just disks (assumes -g auto   when starting nmon)\n");
     printf("\th   = This help information\n");
     printf("\tj   = File Systems including Journal File Systems\n");
+    printf("\tJ   =  Reduces \"j\" output by removing unreal File Systems\n");
     printf
 	("\tk   = Kernel stats Run Queue, context-switch, fork, Load Average & Uptime\n");
     printf
@@ -3457,31 +3331,35 @@ void jfs_load(int load)
 		mp->mnt_dir[JFSNAMELEN - 1] = 0;
 		mp->mnt_type[JFSTYPELEN - 1] = 0;
 	    }
-	    endfsent();
+	    endmntent(mfp);
 	    jfs_loaded = 1;
 	    jfses = i;
 	}
 
 	/* 1st or later time - just reopen the mount points */
-	for (i = 0; i < JFSMAX && jfs[i].name[0] != 0; i++) {
+	for (jfses = 0, i = 0; i < JFSMAX && jfs[i].name[0] != 0; i++) {
 	    if (stat(jfs[i].name, &stat_buffer) != -1) {
-
 		jfs[i].fd = open(jfs[i].name, O_RDONLY);
-		if (jfs[i].fd != -1)
+		if (jfs[i].fd != -1) {
 		    jfs[i].mounted = 1;
-		else
+		} else {
 		    jfs[i].mounted = 0;
+		}
 	    } else
 		jfs[i].mounted = 0;
 	}
+	for (jfses = 0, i = 0; i < JFSMAX && jfs[i].name[0] != 0; i++) {
+	    if (jfs[i].mounted == 1)
+		jfses++;
+	}
     } else {			/* this is an unload request */
-	if (jfs_loaded)
+	if (jfs_loaded) {
 	    for (i = 0; i < JFSMAX && jfs[i].name[0] != 0; i++) {
-		if (jfs[i].mounted)
+		if (jfs[i].fd != 0)
 		    close(jfs[i].fd);
 		jfs[i].fd = 0;
-	} else
-	    /* do nothing */ ;
+	    }
+	} 
     }
 }
 
@@ -3699,6 +3577,10 @@ int checkinput(void)
 		case 'j':
 		    FLIP(show_jfs);
 		    jfs_load(show_jfs);
+		    wclear(padjfs);
+		    break;
+		case 'J':
+		    FLIP(show_jfs_minimum);
 		    wclear(padjfs);
 		    break;
 		case 'k':
@@ -4477,7 +4359,7 @@ int main(int argc, char **argv)
     while (-1 !=
 	   (i =
 	    getopt(argc, argv,
-		   "?abc:C:Dd:EfF:g:hI:l:m:MNpr:Rs:tTUVxXz"))) {
+		   "?abc:C:Dd:EfF:g:hI:Jl:m:MNpr:Rs:tTUVxXz"))) {
 	switch (i) {
 	case '?':
 	    hint();
@@ -4541,19 +4423,14 @@ int main(int argc, char **argv)
 #endif				/* SLES113 */
 
 #ifdef LSBLK_NO_TYPE
-		ret =
-		    system
-		    ("lsblk --nodeps --output NAME --noheadings | awk 'BEGIN {printf \"# This file created by: nmon -g auto\\n# It is an automatically generated disk-group file which excluses disk paritions\\n\" } { printf \"%s %s\\n\", $1, $1 }' >auto");
+#define LSBLK_STRING "lsblk --nodeps --output NAME --noheadings | awk 'BEGIN {printf \"# This file created by: nmon -g auto\\n# It is an automatically generated disk-group file which excluses disk paritions\\n\" } { printf \"%s %s\\n\", $1, $1 }' >auto"
 #else
-		ret =
-		    system
-		    ("lsblk --nodeps --output NAME,TYPE --raw | grep disk | awk 'BEGIN {printf \"# This file created by: nmon -g auto\\n# It is an automatically generated disk-group file which excluses disk paritions\\n\" } { printf \"%s %s\\n\", $1, $1 }' >auto");
+#define LSBLK_STRING "lsblk --nodeps --output NAME,TYPE --raw | grep disk | awk 'BEGIN {printf \"# This file created by: nmon -g auto\\n# It is an automatically generated disk-group file which excluses disk paritions\\n\" } { printf \"%s %s\\n\", $1, $1 }' >auto"
 #endif				/* LSBLK_NO_TYPE */
+		ret = system(LSBLK_STRING);
 		if (ret != 0) {
-		    printf("Create auto file command was: %s\n",
-			   "lsblk --nodeps --output NAME,TYPE --raw | grep disk | awk '{ printf \"%s %s\\n\", $1, $1 }' >auto");
-		    printf("Creating auto file returned a status of %d\n",
-			   ret);
+		    printf("Create auto file command was: %s\n", LSBLK_STRING);
+		    printf("Creating auto file returned a status of %d\n", ret);
 		}
 	    }
 	    break;
@@ -4562,6 +4439,9 @@ int main(int argc, char **argv)
 	    break;
 	case 'I':
 	    ignore_procdisk_threshold = atof(optarg);
+	    break;
+	case 'J':
+	    show_jfs = 0;
 	    break;
 	case 'l':
 	    disks_per_line = atoi(optarg);
@@ -4987,19 +4867,21 @@ int main(int argc, char **argv)
 
 	fprintf(fp, "\n");
 	list_dgroup(p->dk);
-	jfs_load(LOAD);
-	fprintf(fp, "JFSFILE,JFS Filespace %%Used %s", hostname);
-	for (k = 0; k < jfses; k++) {
-	    if (jfs[k].mounted && strncmp(jfs[k].name, "/proc", 5)
-		&& strncmp(jfs[k].name, "/sys", 4)
-		&& strncmp(jfs[k].name, "/run/", 5)
-		&& strncmp(jfs[k].name, "/dev/", 5)
-		&& strncmp(jfs[k].name, "/var/lib/nfs/rpc", 16)
-		)		/* /proc gives invalid/insane values */
-		fprintf(fp, ",%s", jfs[k].name);
+	if(show_jfs) {
+    	    jfs_load(LOAD);
+    	    fprintf(fp, "JFSFILE,JFS Filespace %%Used %s", hostname);
+    	    for (k = 0; k < jfses; k++) {
+	        if (jfs[k].mounted && strncmp(jfs[k].name, "/proc", 5)
+		    && strncmp(jfs[k].name, "/sys", 4)
+		    && strncmp(jfs[k].name, "/run/", 5)
+		    && strncmp(jfs[k].name, "/dev/", 5)
+		    && strncmp(jfs[k].name, "/var/lib/nfs/rpc", 16)
+		    )		/* /proc gives invalid/insane values */
+		    fprintf(fp, ",%s", jfs[k].name);
+	    }
+	    fprintf(fp, "\n");
+	    jfs_load(UNLOAD);
 	}
-	fprintf(fp, "\n");
-	jfs_load(UNLOAD);
 #ifdef POWER
 	if (proc_lparcfg() && lparcfg.shared_processor_mode != 0
 	    && power_vm_type == VM_POWERVM) {
@@ -5416,7 +5298,7 @@ mvwprintw(padwelcome,x+8, 3, "------------------------------");
 	    mvwprintw(padhelp, 6, 1,
 		      "d = Disk I/O Graphs  D=Stats          | o = Disks %%Busy Map");
 	    mvwprintw(padhelp, 7, 1,
-		      "k = Kernel stats & loadavg            | j = Filesystem Usage");
+		      "k = Kernel stats & loadavg            | j = Filesystem Usage J=reduced");
 	    mvwprintw(padhelp, 8, 1, "M = MHz by thread & CPU");
 #ifdef NVIDIA_GPU
 	    mvwprintw(padhelp, 8, 39, "| a = Accelerator Nvidia GPU ");
@@ -6533,8 +6415,8 @@ mvwprintw(padwelcome,x+8, 3, "------------------------------");
 	    proc_read(P_MEMINFO);
 	    proc_mem();
 	    if (cursed) {
-#define RAMCOL 18
-#define SWAPCOL 30
+#define RAMCOL 16
+#define SWAPCOL 28
 #define HIGHCOL 45
 #define LOWCOL 60
 
@@ -6543,8 +6425,8 @@ mvwprintw(padwelcome,x+8, 3, "------------------------------");
 		COLOUR wattrset(padmem, COLOR_PAIR(1));
 		mvwprintw(padmem, 1, 1, "PageSize:%dKB", pagesize / 1024);
 		COLOUR wattrset(padmem, COLOR_PAIR(0));
-		mvwprintw(padmem, 2, 1, "Total in MB");
-		mvwprintw(padmem, 3, 1, "Free  in MB");
+		mvwprintw(padmem, 2, 1, "Total (MB)");
+		mvwprintw(padmem, 3, 1, "Free  (MB)");
 		mvwprintw(padmem, 4, 1, "Free Percent");
 
 		COLOUR wattrset(padmem, COLOR_PAIR(2));
@@ -6558,7 +6440,7 @@ mvwprintw(padwelcome,x+8, 3, "------------------------------");
 			  0 ? 0.0 : 100.0 * (float) p->mem.memfree /
 			  (float) p->mem.memtotal);
 		COLOUR wattrset(padmem, COLOR_PAIR(3));
-		mvwprintw(padmem, 1, SWAPCOL, "Swap-space");
+		mvwprintw(padmem, 1, SWAPCOL, "Swap-Space");
 		mvwprintw(padmem, 2, SWAPCOL, "%10.1f",
 			  p->mem.swaptotal / 1024.0);
 		mvwprintw(padmem, 3, SWAPCOL, "%10.1f",
@@ -6567,7 +6449,7 @@ mvwprintw(padwelcome,x+8, 3, "------------------------------");
 			  p->mem.swapfree ==
 			  0 ? 0.0 : 100.0 * (float) p->mem.swapfree /
 			  (float) p->mem.swaptotal);
-		COLOUR wattrset(padmem, COLOR_PAIR(5));
+		COLOUR wattrset(padmem, COLOR_PAIR(4));
 		mvwprintw(padmem, 1, HIGHCOL, "High-Memory");
 		if (p->mem.hightotal > 0.0) {
 		    mvwprintw(padmem, 2, HIGHCOL, "%8.1f",
@@ -7454,34 +7336,34 @@ I/F Name Recv=KB/s Trans=KB/s packin packout insize outsize Peak->Recv Trans
 	if (show_jfs) {
 	    if (cursed) {
 		BANNER(padjfs, "File Systems");
-		mvwprintw(padjfs, 1, 0,
-			  "Filesystem            SizeMB  FreeMB  Use%% Type     MountPoint");
+		mvwprintw(padjfs, 1, 0, "Filesystem            SizeMB  FreeMB  Use%% Type     MountPoint");
 
-		for (k = 0; k < jfses; k++) {
+		for (k =0, j = 0; k < JFSMAX && j < jfses; k++) {
 		    fs_size = 0;
 		    fs_bsize = 0;
 		    fs_free = 0;
 		    fs_size_used = 100.0;
-		    if (jfs[k].mounted) {
-			if (!strncmp(jfs[k].name, "/proc/", 6)	/* sub directorys have to be fake too */
+		    if (jfs[k].mounted == 0) 
+			continue;
+		    if (!strncmp(jfs[k].name, "/proc/", 6)	/* sub directorys have to be fake too */
 			    ||!strncmp(jfs[k].name, "/sys/", 5)
 			    || !strncmp(jfs[k].name, "/dev/", 5)
 			    || !strncmp(jfs[k].name, "/proc", 6)	/* one more than the string to ensure the NULL */
 			    ||!strncmp(jfs[k].name, "/sys", 5)
 			    || !strncmp(jfs[k].name, "/dev", 5)
+                            || !strncmp(jfs[i].name, "/var/lib/nfs/rpc", 16)
 			    || !strncmp(jfs[k].name, "/rpc_pipe", 10)
 			    ) {	/* /proc gives invalid/insane values */
-			    mvwprintw(padjfs, 2 + k, 0, "%-14s",
-				      jfs[k].name);
-			    mvwprintw(padjfs, 2 + k, 27, "-");
-			    mvwprintw(padjfs, 2 + k, 35, "-");
-			    mvwprintw(padjfs, 2 + k, 41, "-");
-			    COLOUR wattrset(padjfs, COLOR_PAIR(4));
-			    mvwprintw(padjfs, 2 + k, 43,
-				      "%-8s not a real filesystem",
-				      jfs[k].type);
-			    COLOUR wattrset(padjfs, COLOR_PAIR(0));
-			} else {
+			         if(show_jfs_minimum)  /* just skip outputing this JFS */
+				     continue;
+				 mvwprintw(padjfs, 2 + j, 0, "%-14s", jfs[k].name);
+				 mvwprintw(padjfs, 2 + j, 27, "-");
+				 mvwprintw(padjfs, 2 + j, 35, "-");
+				 mvwprintw(padjfs, 2 + j, 41, "-");
+				 COLOUR wattrset(padjfs, COLOR_PAIR(4));
+				 mvwprintw(padjfs, 2 + j, 43, "%-8s not a real filesystem", jfs[k].type);
+				 COLOUR wattrset(padjfs, COLOR_PAIR(0));
+		    } else {
 			    statfs_buffer.f_blocks = 0;
 			    if ((ret =
 				 fstatfs(jfs[k].fd,
@@ -7528,40 +7410,34 @@ I/F Name Recv=KB/s Trans=KB/s packin packout insize outsize Peak->Recv Trans
 				    else {
 					str_p = &jfs[k].device[i - 20];
 				    }
-				    mvwprintw(padjfs, 2 + k, 0,
+				    mvwprintw(padjfs, 2 + j, 0,
 					      "%-20s %7.0f %7.0f %4.0f%% %-8s %s",
 					      str_p, fs_size, fs_free,
 					      ceil(fs_size_used),
 					      jfs[k].type, jfs[k].name);
 
 				} else {
-				    mvwprintw(padjfs, 2 + k, 0, "%s",
+				    mvwprintw(padjfs, 2 + j, 0, "%s",
 					      jfs[k].name);
 				    COLOUR wattrset(padjfs, COLOR_PAIR(5));
-				    mvwprintw(padjfs, 2 + k, 43,
+				    mvwprintw(padjfs, 2 + j, 43,
 					      "%-8s size=zero blocks!",
 					      jfs[k].type);
 				    COLOUR wattrset(padjfs, COLOR_PAIR(0));
 				}
 			    } else {
-				mvwprintw(padjfs, 2 + k, 0, "%s",
+				mvwprintw(padjfs, 2 + j, 0, "%s",
 					  jfs[k].name);
 				COLOUR wattrset(padjfs, COLOR_PAIR(3));
-				mvwprintw(padjfs, 2 + k, 43,
+				mvwprintw(padjfs, 2 + j, 43,
 					  "%-8s statfs failed",
 					  jfs[k].type);
 				COLOUR wattrset(padjfs, COLOR_PAIR(0));
 			    }
 			}
-		    } else {
-			mvwprintw(padjfs, 2 + k, 0, "%-14s", jfs[k].name);
-			COLOUR wattrset(padjfs, COLOR_PAIR(1));
-			mvwprintw(padjfs, 2 + k, 43, "%-8s not mounted",
-				  jfs[k].type);
-			COLOUR wattrset(padjfs, COLOR_PAIR(0));
+		    j++;
 		    }
-		}
-		DISPLAY(padjfs, 2 + jfses);
+		DISPLAY(padjfs, 2 + j);
 	    } else {
 		jfs_load(LOAD);
 		fprintf(fp,

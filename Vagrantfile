@@ -6,34 +6,50 @@
 servers=[
       # This box is not affected by current trouble with Ubuntu 15 / 16
       {
-        :hostname => "ubuntu-1604-64",
-        :box => "easyscp/xenial",
+        :hostname => "ubuntu-1704-64",
+        :box => "xenji/ubuntu-17.04-server",
         :ram => 512,
         :cpu => 1
       },
-      # This image does not currently works with private network,see:
-      # https://github.com/mitchellh/vagrant/issues/6871
-      #{
-      #  :hostname => "ubuntu-1510-64",
-      #  :box => "boxcutter/ubuntu1510",
-      #  :ram => 512,
-      #  :cpu => 1
-      #},
       {
-        :hostname => "ubuntu-1510-64",
-        :box => "sgallen/wily64",
+        :hostname => "ubuntu-1610-64",
+        :box => "boxcutter/ubuntu1610",
+        :ram => 512,
+        :cpu => 1
+      },
+      {
+        :hostname => "ubuntu-1604-64",
+        :box => "boxcutter/ubuntu1604",
         :ram => 512,
         :cpu => 1
       },
       {
         :hostname => "ubuntu-1404-64",
         :box => "boxcutter/ubuntu1404",
-        :ram => 512,
+        :ram => 2048,
         :cpu => 1
       },
       {
         :hostname => "ubuntu-1204-64",
         :box => "boxcutter/ubuntu1204",
+        :ram => 512,
+        :cpu => 1
+      },
+      {
+        :hostname => "ubuntu-1610-32",
+        :box => "boxcutter/ubuntu1610-i386",
+        :ram => 512,
+        :cpu => 1
+      },
+      {
+        :hostname => "ubuntu-1604-32",
+        :box => "boxcutter/ubuntu1604-i386",
+        :ram => 512,
+        :cpu => 1
+      },
+      {
+        :hostname => "ubuntu-1704-32",
+        :box => "wholebits/ubuntu17.04-32",
         :ram => 512,
         :cpu => 1
       },
@@ -50,20 +66,20 @@ servers=[
         :cpu => 1
       },
       {
+        :hostname => "oraclelinux-73-64",
+        :box => "boxcutter/ol73",
+        :ram => 512,
+        :cpu => 1
+      },
+      {
         :hostname => "oraclelinux-72-64",
         :box => "boxcutter/ol72",
         :ram => 512,
         :cpu => 1
       },
       {
-        :hostname => "oraclelinux-71-64",
-        :box => "boxcutter/ol71",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "oraclelinux-70-64",
-        :box => "boxcutter/ol70",
+        :hostname => "oraclelinux-68-64",
+        :box => "boxcutter/ol68",
         :ram => 512,
         :cpu => 1
       },
@@ -74,44 +90,14 @@ servers=[
         :cpu => 1
       },
       {
-        :hostname => "oraclelinux-66-64",
-        :box => "boxcutter/ol66",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "oraclelinux-65-64",
-        :box => "boxcutter/ol65",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "oraclelinux-64-64",
-        :box => "boxcutter/ol64",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
         :hostname => "oraclelinux-67-32",
         :box => "boxcutter/ol67-i386",
         :ram => 512,
         :cpu => 1
       },
       {
-        :hostname => "oraclelinux-66-32",
-        :box => "boxcutter/ol66-i386",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "oraclelinux-65-32",
-        :box => "boxcutter/ol65-i386",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "oraclelinux-64-32",
-        :box => "boxcutter/ol64-i386",
+        :hostname => "centos-73-64",
+        :box => "boxcutter/centos73",
         :ram => 512,
         :cpu => 1
       },
@@ -122,110 +108,38 @@ servers=[
         :cpu => 1
       },
       {
-        :hostname => "centos-71-64",
-        :box => "boxcutter/centos71",
+        :hostname => "centos-68-64",
+        :box => "boxcutter/centos68",
         :ram => 512,
         :cpu => 1
       },
       {
-        :hostname => "centos-70-64",
-        :box => "boxcutter/centos70",
+        :hostname => "centos-68-32",
+        :box => "boxcutter/centos68-i386",
         :ram => 512,
         :cpu => 1
       },
       {
-        :hostname => "centos-67-64",
-        :box => "boxcutter/centos67",
+        :hostname => "debian-8-64",
+        :box => "boxcutter/debian8",
         :ram => 512,
         :cpu => 1
       },
       {
-        :hostname => "centos-66-64",
-        :box => "boxcutter/centos66",
+        :hostname => "debian-7-64",
+        :box => "boxcutter/debian7",
         :ram => 512,
         :cpu => 1
       },
       {
-        :hostname => "centos-65-64",
-        :box => "boxcutter/centos65",
+        :hostname => "debian-8-32",
+        :box => "boxcutter/debian8-i386",
         :ram => 512,
         :cpu => 1
       },
       {
-        :hostname => "centos-64-64",
-        :box => "boxcutter/centos64",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "centos-67-32",
-        :box => "boxcutter/centos67-i386",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "centos-66-32",
-        :box => "boxcutter/centos66-i386",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "centos-65-32",
-        :box => "boxcutter/centos65-i386",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "centos-64-32",
-        :box => "boxcutter/centos64-i386",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "sles11sp3",
-        :box => "suse/sles11sp3",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "sles12",
-        :box => "idar/sles12",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "opensuse-13",
-        :box => "webhippie/opensuse-13.2",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "debian-jessies64",
-        :box => "debian/jessie64",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "fedora23",
-        :box => "akanto/fedora-23-server",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "rhel5",
-        :box => "mcgill/rhel5-x86_64",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "rhel6",
-        :box => "anandbitra/redhat-6.5",
-        :ram => 512,
-        :cpu => 1
-      },
-      {
-        :hostname => "rhel7",
-        :box => "bertrandjamin/rhel7",
+        :hostname => "debian-7-32",
+        :box => "boxcutter/debian7-i386",
         :ram => 512,
         :cpu => 1
       }
@@ -263,7 +177,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "ansible" do |ansible|
     ansible.limit = "all"
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "main.yml"
     #ansible.inventory_path = "ansible_inventory"
     #ansible.host_key_checking = false
     #ansible.verbose = "v"
